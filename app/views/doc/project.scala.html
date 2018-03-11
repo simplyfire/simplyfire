@@ -1,0 +1,98 @@
+@()
+<h2>Проект (Project)</h2>
+<pre><code>v1/api/projects/
+</code></pre>
+<p>Методы для работы с проектами пользователей</p>
+<h3>Описание методов:</h3>
+<h3>1. Получение списка проектов текущего пользователя</h3>
+<pre><code>GET /projects?{params}
+</code></pre>
+<p>Параметры метода:</p>
+<table>
+    <thead>
+        <tr><th>Параметр</th><th>Обязательный</th><th>По умолчанию</th><th>Значение</th><th>Способ передачи</th><th>
+            Ключ словаря</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>limit</td><td>Нет</td><td>25</td><td>Ограничение на количество возвращаемых проектов</td><td>
+            Параметр Get-запроса</td><td>-</td></tr>
+        <tr><td>offset</td><td>Нет</td><td>0</td><td>Смещение относительно начала списка</td><td>
+            Параметр Get-запроса</td><td>-</td></tr>
+    </tbody>
+</table>
+<p>Пример запроса:</p>
+<pre><code>v1/api/projects?limit=10&amp;offset=20
+</code></pre>
+<h4>Результат:</h4>
+<p>Список проектов:</p>
+<pre><code class="language-json">{
+    "response": {
+        "count": 3,
+        "items": [
+            {
+                "id": 1,
+                "name": "test",
+                "file_name": "Admin-test"
+            },
+            {
+                "id": 2,
+                "name": "MyBestProject",
+                "file_name": "Admin-MyBestProject"
+            },
+            {
+                "id": 3,
+                "name": "PrivateProject",
+                "file_name": "Admin-PrivateProject"
+            }
+        ]
+    }
+}
+</code></pre>
+<h3>2. Создание нового проекта</h3>
+<pre><code>POST /projects/create
+</code></pre>
+<p>Параметры метода:</p>
+<table>
+    <thead>
+        <tr><th>Параметр</th><th>Обязательный</th><th>По умолчанию</th><th>Значение</th><th>Способ передачи</th><th>
+            Ключ словаря</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>project_name</td><td>Да</td><td>-</td><td>Название проекта</td><td>JSON</td><td>name</td></tr>
+    </tbody>
+</table>
+<p>Пример запроса:</p>
+<pre><code>v1/api/projects/create
+</code></pre>
+<p>JSON:</p>
+<pre><code class="language-json">{
+    "name" : "MyProjectName"
+}
+</code></pre>
+<h4>Результат:</h4>
+<p>Проект удачно создан:</p>
+<pre><code class="language-json">{
+    "response": "Project created"
+}
+</code></pre>
+<p>Проект уже существует:</p>
+<pre><code class="language-json">{
+    "error": [
+        {
+            "status": "400",
+            "message": "Object already exist",
+            "param": "project_name"
+        }
+    ]
+}
+</code></pre>
+<p>Некорректный JSON:</p>
+<pre><code class="language-json">{
+    "error": [
+        {
+            "status": "400",
+            "message": "Incorrect JSON"
+        }
+    ]
+}
+</code></pre>

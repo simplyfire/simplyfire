@@ -1,0 +1,69 @@
+@import models.files.RepoFile
+@import models.files.VersionFile
+@import helper._
+@(username: String, projectname: String, path: String, pathList: List[RepoFile], files: List[VersionFile])
+@main(username + "/" + projectname + "/" + path) {
+    <div class="row card-panel blue-grey lighten-5">
+        <div class="col s7">
+            <div class="breadcrumb black-text">
+                <a href="@routes.FilesController.showDir(username, projectname, "")">@username / @projectname</a> /
+                @for(breadcrumb <- pathList) {
+                    @if(breadcrumb.typeFile.typeName.equals("File")){
+                        <a href="@routes.FilesController.showFile(username, projectname, breadcrumb.path)">@breadcrumb.name</a> /
+                    }else{
+                        <a href="@routes.FilesController.showDir(username, projectname, breadcrumb.path)">@breadcrumb.name</a> /
+                    }
+                }
+            </div>
+        </div>
+        <div class="col s5 right-align">
+            <a class="btn-add-file btn waves-effect waves-light" href="@routes.FilesController.newVersion(username, projectname, path)">
+                Upload
+            </a>
+            <a class="btn-add-dir btn waves-effect waves-light red lighten-1 modal-trigger" href="#@pathList.last.id">
+                Delete
+            </a>
+        </div>
+
+        <div id="@pathList.last.id" class="modal">
+            <div class="modal-content">
+                <h5>Remove file</h5>
+                <p>Do you really want to delete file: @pathList.last.name?</p>
+            </div>
+            <div class="modal-footer">
+                <form action="@routes.FilesController.destroy(username, projectname, pathList.last.path)" method="post">
+                    @CSRF.formField
+                    <button class=" waves-effect waves-light waves-teal btn-flat" type="submit">Ok</button>
+                    <button class="btn waves-effect waves-light" onclick="$('#@pathList.last.id').modal('close');" type="button">Cancel</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <table class="bordered highlight">
+        <thead>
+            <tr class="row">
+                <th class="col s7">Name</th>
+                <th class="col s3">Date</th>
+                <th class="col s2"></th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(file <- files) {
+            <tr class="row" >
+                <td class="col s7">
+                    <i class="fas fa-file"></i>
+                    @file.file.name
+                </td>
+                <td class="col s3">
+                    @file.date.format("yyyy.MM.dd HH:mm:ss")
+                </td>
+                <td class="col s2 right-align">
+                    <a class="btn-floating btn-tb green lighten-2" href="@routes.FilesController.download(username,projectname,file.id,file.file.path+file.fileName)">
+                        <i class="material-icons">file_download</i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+}

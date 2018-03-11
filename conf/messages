@@ -1,0 +1,3 @@
+error.required=missing {0}
+error.maxLength={0}: maximum length is 50
+error.contentMaxLen=Content: maximum length is 1000

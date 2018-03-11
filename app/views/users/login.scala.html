@@ -1,0 +1,28 @@
+@import controllers.UserController.LoginForm
+@import helper._
+
+@(loginForm: Form[LoginForm])
+
+@implicitField = @{    FieldConstructor(fieldConstructorTemplate.f)}
+
+@main("Sign in") {
+    <h4 class="center-align">Sign in</h4>
+    <div class="row">
+        <div class="col s6 offset-s3">
+
+            @infoBox(loginForm.allErrors())
+
+            @form(routes.UserController.authenticate()) {
+                @CSRF.formField
+                @input(loginForm("email"), '_label -> "Email", 'class ->"validate") { (id, name, value, args) =>
+                    <input type="email" name="@name" id="@id" @toHtmlArgs(args)>
+                }
+                @inputPassword(loginForm("password"), '_label -> "Password")
+                <div class="center-align">
+                    <button class="btn waves-effect waves-light" type="submit">Sign in</button>
+                    <a class="waves-effect waves-light waves-teal btn-flat" href="@routes.UserController.create()">Register</a>
+                </div>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,200 @@
+@()
+<h2>Файл (File)</h2>
+<pre><code>v1/api/:project_id/files</code></pre>
+<p>Методы для работы с файлами проекта</p>
+<h3>Описание методов:</h3>
+<h3>1. Получение списка файлов выбранного проекта из указанной папки</h3>
+<pre><code>GET /:project_id/files?{params}
+</code></pre>
+<p>Параметры метода:</p>
+<table>
+    <thead>
+        <tr><th>Параметр</th><th>Обязательный</th><th>По умолчанию</th><th>Значение</th><th>Способ передачи</th><th>
+            Ключ словаря</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>project_id</td><td>Да</td><td>-</td><td>Идентификатор проекта</td><td>Элемент строки запроса</td><td>
+            -</td></tr>
+        <tr><td>path</td><td>Нет</td><td>""</td><td>Путь до папки внутри проекта</td><td>Параметр Get-запроса</td><td>
+            -</td></tr>
+        <tr><td>limit</td><td>Нет</td><td>25</td><td>Ограничение на количество возвращаемых проектов</td><td>
+            Параметр Get-запроса</td><td>-</td></tr>
+        <tr><td>offset</td><td>Нет</td><td>0</td><td>Смещение относительно начала списка</td><td>
+            Параметр Get-запроса</td><td>-</td></tr>
+    </tbody>
+</table>
+<p>Пример запроса:</p>
+<pre><code>v1/api/2/files
+</code></pre>
+<p>Результат:
+    Список файлов в корне проекта:</p>
+<pre><code class="language-json">{
+    "response": {
+        "count": 3,
+        "items": [
+            {
+                "id": 11,
+                "name": "Билеты.docx",
+                "path": "Билеты.docx/",
+                "type_name": "File"
+            },
+            {
+                "id": 10,
+                "name": "93-4.owl",
+                "path": "93-4.owl/",
+                "type_name": "File"
+            },
+            {
+                "id": 9,
+                "name": "testFolder",
+                "path": "testFolder/",
+                "type_name": "Directory"
+            }
+        ]
+    }
+}
+</code></pre>
+<p>Пример запроса:</p>
+<pre><code>v1/api/2/files?path=testFolder/
+</code></pre>
+<p>Результат:
+    Список файлов в папке testFolder:</p>
+<pre><code class="language-json">{
+    "response": {
+        "count": 1,
+        "items": [
+            {
+                "id": 12,
+                "name": "20.12.docx",
+                "path": "testFolder/20.12.docx/",
+                "type_name": "File"
+            }
+        ]
+    }
+}
+</code></pre>
+<p>Пример запроса:</p>
+<pre><code>v1/api/150/files?path=testFolder/
+</code></pre>
+<p>Результат:
+    Проект не найден</p>
+<pre><code class="language-json">{
+    "error": [
+        {
+            "status": "404",
+            "message": "Object not found",
+            "not found": "Project"
+        }
+    ]
+}
+</code></pre>
+<h3>2. Загрузка файла в проект с указанием пути к папке в этом прокете</h3>
+<pre><code>POST /:project_id/files/upload
+</code></pre>
+<p>Параметры метода:</p>
+<table>
+    <thead>
+        <tr><th>Параметр</th><th>Обязательный</th><th>По умолчанию</th><th>Значение</th><th>Способ передачи</th><th>
+            Ключ словаря</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>project_id</td><td>Да</td><td>-</td><td>Идентификатор проекта</td><td>Элемент строки запроса</td><td>
+            -</td></tr>
+        <tr><td>path</td><td>Нет</td><td>""</td><td>Путь до папки внутри проекта</td><td>Параметр запроса</td><td>
+            -</td></tr>
+        <tr><td>File</td><td>Да</td><td>-</td><td>Загружаемый файл</td><td>Form-data file</td><td>File</td></tr>
+    </tbody>
+</table>
+<p>Пример запроса:</p>
+<pre><code>v1/api/2/files/upload
+</code></pre>
+<p>Body запроса: form-data: File -&gt; "Загружаемый файл"</p>
+<p>Результат:
+    Файл успешно загружен:</p>
+<pre><code class="language-json">{
+    "response": "File was uploaded!"
+}
+</code></pre>
+<p>Пример запроса:</p>
+<pre><code>v1/api/2/files/upload
+</code></pre>
+<p>Body запроса: form-data: SomeFileName -&gt; "Загружаемый файл"
+    Результат:</p>
+<pre><code class="language-json">{
+    "error": [
+        {
+            "status": "400",
+            "message": "Error during upload file! Check file key, it should be 'File'"
+        }
+    ]
+}
+</code></pre>
+<p>Обратите внимание, что ключ в словаре должен быть 'File', а не 'SomeFileName', к примеру.</p>
+<p>Пример запроса:</p>
+<pre><code>v1/api/2/files/upload?path=testFolder/
+</code></pre>
+<p>Body запроса: form-data: File -&gt; "Загружаемый файл"</p>
+<p>Результат:
+    Файл успешно загружен:</p>
+<pre><code class="language-json">{
+    "response": "File was uploaded!"
+}
+</code></pre>
+<h3>3. Загрузка новой версии для существующего файла в проекте</h3>
+<pre><code>POST /:project_id/files/:file_id/upload
+</code></pre>
+<p>Параметры метода:</p>
+<table>
+    <thead>
+        <tr><th>Параметр</th><th>Обязательный</th><th>По умолчанию</th><th>Значение</th><th>Способ передачи</th><th>
+            Ключ словаря</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>project_id</td><td>Да</td><td>-</td><td>Идентификатор проекта</td><td>Элемент строки запроса</td><td>
+            -</td></tr>
+        <tr><td>file_id</td><td>Да</td><td>-</td><td>Идентификатор файла</td><td>Элемент строки запроса</td><td>-</td></tr>
+        <tr><td>File</td><td>Да</td><td>-</td><td>Загружаемый файл</td><td>Form-data file</td><td>File</td></tr>
+    </tbody>
+</table>
+<p>Пример запроса:</p>
+<pre><code>v1/api/1/files/1/upload
+</code></pre>
+<p>Body запроса: form-data: File -&gt; "Загружаемый файл"
+    Результат:
+    Файл успешно загружен:</p>
+<pre><code class="language-json">{
+    "response": "File was uploaded!"
+}
+</code></pre>
+<h3>4. Получение файла из проекта (Выгрузка файла). Выполняется скачивание последней версии файла</h3>
+<pre><code>GET /:project_id/files/:file_id/download
+</code></pre>
+<p>Параметры метода:</p>
+<table>
+    <thead>
+        <tr><th>Параметр</th><th>Обязательный</th><th>По умолчанию</th><th>Значение</th><th>Способ передачи</th><th>
+            Ключ словаря</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>project_id</td><td>Да</td><td>-</td><td>Идентификатор проекта</td><td>Элемент строки запроса</td><td>
+            -</td></tr>
+        <tr><td>file_id</td><td>Да</td><td>-</td><td>Идентификатор файла</td><td>Элемент строки запроса</td><td>-</td></tr>
+    </tbody>
+</table>
+<p>Пример запроса:</p>
+<pre><code>v1/api/1/files/7/download
+</code></pre>
+<p>Результат: Поток выходного файла</p>
+<p>Пример запроса</p>
+<pre><code>v1/api/1/files/150/download
+</code></pre>
+<p>Результат:</p>
+<pre><code class="language-json">{
+    "error": [
+        {
+            "status": "404",
+            "message": "File not found"
+        }
+    ]
+}
+</code></pre>

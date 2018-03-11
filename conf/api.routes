@@ -1,0 +1,29 @@
+GET     /               api.v1.ApiController.index
+
+#Projects
+
+#Params: email (required) password (required)
+GET     /token/get                  api.v1.ApiController.getToken()
+
+#Params: auth_token(Header: Authorization) (required) ,limit (25), offset (0)
+GET     /projects                   api.v1.ApiProjectController.index()
+#Params: auth_token(Header: Authorization) (required) ,project_name (required) :JSON
++ nocsrf
+POST    /projects/create            api.v1.ApiProjectController.create()
+
+
+#Files
+
+#Params: auth_token(Header: Authorization) (required) , projectId (required), path("") limit (25), offset (0)
+GET     /:projectId/files           api.v1.ApiFilesController.index(projectId :Long)
+#Params: auth_token(Header: Authorization) (required) , projectId (required), path(required), file (required) :form-data
++ nocsrf
+POST    /:projectId/files/upload           api.v1.ApiFilesController.uploadNew(projectId :Long)
+
+#Params: auth_token(Header: Authorization) (required) , projectId (required), file_id(required), file (required) :form-data
++ nocsrf
+POST    /:projectId/files/:fileId/upload        api.v1.ApiFilesController.uploadVersion(projectId :Long,fileId :Long)
+#Params: auth_token(Header: Authorization) (required) , projectId (required) , file_id(required)
+GET     /:projectId/files/:fileId/download     api.v1.ApiFilesController.show(projectId :Long,fileId :Long)
+
+#GET    /admin/temp/otology/

@@ -1,0 +1,23 @@
+@(pageList: List[DocPage], selectedPage: DocPage, mdText: Html)
+
+@main(selectedPage.name){
+
+    <div class="row">
+        <div class="col s3">
+            <div class="collection">
+                @for(page <- pageList){
+                    @if(page == selectedPage){
+                        <a href="@page.route" class="collection-item active">@page.name</a>
+                    }else{
+                        <a href="@page.route" class="collection-item">@page.name</a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="col s9">
+            <div id="markdown-body" class="card-panel markdown-body">
+                @mdText
+            </div>
+        </div>
+    </div>
+}

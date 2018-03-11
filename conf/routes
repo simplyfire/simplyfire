@@ -1,0 +1,47 @@
+#Api v1.0
+->      /v1/api                                                        api.Routes
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                                                  controllers.Assets.versioned(path="/public", file: Asset)
+
+#Home
+GET     /                                                              controllers.HomeController.index
+
+#Feedback
+GET     /feedback                                                      controllers.FeedbackController.create
+POST    /feedback                                                      controllers.FeedbackController.save
+
+#User
+GET     /login                                                         controllers.UserController.login
+POST    /login                                                         controllers.UserController.authenticate
+GET     /logout                                                        controllers.UserController.logout
+GET     /signup                                                        controllers.UserController.create
+POST    /signup                                                        controllers.UserController.save
+
+#Docs
+GET     /docs                                                          controllers.DocsController.getstarted
+GET     /docs/auth                                                     controllers.DocsController.auth
+GET     /docs/project                                                  controllers.DocsController.project
+GET     /docs/file                                                     controllers.DocsController.file
+
+#Project
+GET     /project                                                       controllers.ProjectController.index
+GET     /project/create                                                controllers.ProjectController.create()
+POST    /project/create                                                controllers.ProjectController.save()
+GET     /:username/:projectname                                        controllers.ProjectController.show(username :String, projectname :String)
+
+#File
+GET     /:username/:projectname/file/create/$path<([^/]+/?)*>          controllers.FilesController.createFile(username :String, projectname :String, path :String)
+POST    /:username/:projectname/file/create/$path<([^/]+/?)*>          controllers.FilesController.saveFile(username :String, projectname :String, path :String)
+GET     /:username/:projectname/directory/create/$path<([^/]+/?)*>     controllers.FilesController.createDir(username :String, projectname :String, path :String)
+POST    /:username/:projectname/directory/create/$path<([^/]+/?)*>     controllers.FilesController.saveDir(username :String, projectname :String, path :String)
+POST    /:username/:projectname/file/delete/$path<([^/]+/?)*>          controllers.FilesController.destroy(username :String, projectname :String, path :String)
+GET     /:username/:projectname/file/version/$path<([^/]+/?)*>         controllers.FilesController.showFile(username :String, projectname :String, path :String)
+GET     /:username/:projectname/file/newversion/$path<([^/]+/?)*>                   controllers.FilesController.newVersion(username :String, projectname :String, path :String)
+POST    /:username/:projectname/file/newversion/$path<([^/]+/?)*>                   controllers.FilesController.saveVersion(username :String, projectname :String, path :String)
+GET     /:username/:projectname/file/:idVersion/download/$path<([^/]+/?)*>          controllers.FilesController.download(username :String, projectname :String,idVersion :Long, path :String)
+GET     /:username/:projectname/$path<([^/]+/?)*>                                   controllers.FilesController.showDir(username :String, projectname :String, path :String)
+
+
+
+

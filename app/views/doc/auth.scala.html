@@ -1,0 +1,53 @@
+@()
+<h2>Аутентификация (Authentication)</h2>
+<pre><code>v1/api/token/</code></pre>
+<p>Для получения доступа к ресурсам репозитория и использованию методов API, пользователю необходимо иметь Токен доступа, который можно получить с помощью описанного ниже метода.</p>
+<p>Получение токена доступа пользователя:</p>
+<pre><code>GET /token/get</code></pre>
+<p>Параметры метода:</p>
+<table>
+    <thead>
+        <tr><th>Параметр</th><th>Обязательный</th><th>По умолчанию</th><th>Значение</th><th>Способ передачи</th><th>
+            Ключ словаря</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>email</td><td>Да</td><td>-</td><td>Электронный адрес зарегистрированного пользователя</td><td>
+            Параметр Get-запроса</td><td>-</td></tr>
+        <tr><td>password</td><td>Да</td><td>-</td><td>Пароль пользователя</td><td>Параметр Get-запроса</td><td>-</td></tr>
+    </tbody>
+</table>
+<p>Пример запроса:</p>
+<pre><code>v1/api/token/get?email=user@@user.com&amp;password=userspassword
+</code></pre>
+<h4>Результат:</h4>
+<pre><code class="language-json">{
+    "response": {
+        "auth_token": "53b37527-45fe-495d-9871-f6f599397128"
+    }
+}
+</code></pre>
+<p>Полученный Токен доступа необходимо использовать в каждом запросе к API.</p>
+<p>Токен доступа передается в списке заголовков запроса "Headers" с ключом "Authorization".</p>
+<p>В случае, если Токен доступа не был передан в запрос, сервер вернет следующий ответ:</p>
+<pre><code class="language-json">{
+    "error": [
+        {
+            "status": "400",
+            "message": "Missing required params",
+            "missed": [
+                "auth_token"
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>В случае, если пользователь не имеет доступ к запрашиваемую ресурсу, сервер вернет следующий ответ:</p>
+<pre><code class="language-json">{
+    "error": [
+        {
+            "status": "403",
+            "message": "Access is denied"
+        }
+    ]
+}
+</code></pre>

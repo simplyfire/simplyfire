@@ -1,0 +1,36 @@
+@import models.files.RepoFile
+@import helper._
+@(username: String, projectname: String, path:String, fileForm: Form[RepoFile])
+
+@import helper._
+@implicitField = @{
+    FieldConstructor(fieldConstructorTemplate.f)
+}
+@main("New File") {
+    <h4 class="center-align">New File</h4>
+    @form(action = routes.FilesController.saveFile(username, projectname, path), 'enctype -> "multipart/form-data") {
+        @CSRF.formField
+        <div class="row">
+            <div class="col s6 offset-s3">
+                @infoBox(fileForm.allErrors())
+
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>File</span>
+                        <input type="file" name="fileUploaded">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+
+                <div class="center-align">
+                    <button class="btn waves-effect ">Upload</button>
+                    <a class="waves-effect waves-light waves-teal btn-flat btn-cancel"
+                        href="@routes.FilesController.showDir(username, projectname, path)" type="button">Cancel</a>
+                </div>
+
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,26 @@
+@import models.projects.Project
+@(projectForm: Form[Project])
+
+@import helper._
+@implicitField = @{
+    FieldConstructor(fieldConstructorTemplate.f)
+}
+@main("New Project") {
+    <h4 class="center-align">New Project</h4>
+    @form(routes.ProjectController.save()) {
+        @CSRF.formField
+        <div class="row">
+            <div class="col s6 offset-s3">
+
+                @infoBox(projectForm.allErrors())
+
+                @inputText(projectForm("name"), '_label -> "Project name")
+
+                <div class="center-align">
+                    <button class="btn waves-effect waves-light" type="submit">Create</button>
+                    <button class="waves-effect waves-light waves-teal btn-flat btn-cancel" onclick="window.history.back();" type="button">Cancel</button>
+                </div>
+            </div>
+        </div>
+    }
+}

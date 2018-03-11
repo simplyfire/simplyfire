@@ -1,0 +1,113 @@
+@woff2: "../iconfont/MaterialIcons-Regular.woff2";
+@woff: "../iconfont/MaterialIcons-Regular.woff";
+@truetype: "../iconfont/MaterialIcons-Regular.ttf";
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+  .container {
+    margin-top: 30px;
+  }
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://example.com/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+  local('MaterialIcons-Regular'),
+  url(@woff2) format('woff2'),
+  url(@woff) format('woff'),
+  url(@truetype) format('truetype');
+}
+
+.brand-logo{
+  margin-left: 30px;
+}
+
+div.breadcrumb {
+  color: black;
+  a {
+    color: black;
+    line-height: 33px;
+    font-size: 15px;
+  }
+  a:hover {
+    color: #323232;
+    text-decoration: underline;
+  }
+}
+
+table {
+  line-height: 42px;
+
+  tbody {
+    tr {
+      cursor: pointer;
+    }
+  }
+
+  a.btn-tb {
+    width: 33px;
+    height: 33px;
+    i {
+      font-size: 21px;
+      line-height: 33px;
+    }
+  }
+}
+
+.btn-delete-file{
+  margin-right: 15px;
+}
+
+.btn-add-file{
+  margin-left: 15px;
+}
+
+.modal{
+  width: 35%;
+}
+
+div.success-panel{
+  padding: 8px;
+}
+
+div.error-panel{
+  padding: 8px;
+}
+
+.page-footer{
+  padding-top: 0;
+}

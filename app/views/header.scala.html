@@ -1,0 +1,23 @@
+@import models.users.Users
+@()
+<nav>
+    <div class="nav-wrapper indigo darken-3">
+        <a href="@routes.HomeController.index()" class="brand-logo">SimplyFire</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            @if(Users.findByEmail(session().get("email")) == null){
+                <li><a href="@routes.DocsController.getstarted()">Docs</a></li>
+                <li><a href="@routes.UserController.login()">Sign In/Register</a></li>
+            }else{
+                <li><a href="@routes.ProjectController.index()">Projects</a></li>
+                <li><a href="@routes.FeedbackController.create()">Feedback</a></li>
+                <li><a href="@routes.DocsController.getstarted()">Docs</a></li>
+                <li><a href="#!" data-activates="user" class="dropdown-button"><i class="material-icons right">arrow_drop_down</i>@Users.findByEmail(session().get("email")).username</a></li>
+                <ul id="user" class="dropdown-content">
+                    @*<li><a href="#!">Settings</a></li>*@
+                    <li class="divider"></li>
+                    <li><a href="@routes.UserController.logout()" type="button">Logout</a></li>
+                </ul>
+            }
+        </ul>
+    </div>
+</nav>

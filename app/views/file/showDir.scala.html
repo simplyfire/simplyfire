@@ -1,0 +1,86 @@
+@import models.files.RepoFile
+@import helper._
+@(username: String, projectname: String, path: String, pathList: List[RepoFile], files: List[RepoFile])
+
+    @main(username + "/" + projectname + "/" + path) {
+        <div class="row card-panel blue-grey lighten-5">
+            <div class="col s8">
+                <div class="breadcrumb black-text">
+                    <a href='@routes.FilesController.showDir(username, projectname, "")'>@username / @projectname</a> /
+                    @for(breadcrumb <- pathList){
+                        <a href="@routes.FilesController.showDir(username, projectname, breadcrumb.path)">@breadcrumb.name</a> /
+                    }
+                </div>
+            </div>
+            <div class="col s4 right-align">
+                <a class='dropdown-button btn' href='#' data-activates='dropdown1'>New<i class="material-icons right">arrow_drop_down</i></a>
+                <ul id='dropdown1' class='dropdown-content'>
+                    <li><a href="@routes.FilesController.createFile(username, projectname, path)">File</a></li>
+                    <li><a href="@routes.FilesController.createDir(username, projectname, path)">Folder</a></li>
+                </ul>
+                @*<a class="btn-add-file btn waves-effect waves-light" href="@routes.FilesController.createFile(username, projectname, path)">*@
+                    @*New File*@
+                @*</a>*@
+                @*<a class="btn-add-dir btn waves-effect waves-light" href="@routes.FilesController.createDir(username, projectname, path)">*@
+                    @*New Folder*@
+                @*</a>*@
+            </div>
+        </div>
+    <table class="bordered highlight">
+        <thead>
+            <tr class="row">
+                <th class="col s7">Name</th>
+                <th class="col s3">Date</th>
+                <th class="col s2"></th>
+            </tr>
+        </thead>
+        <tbody>
+        @for(file <- files) {
+            <tr class="row" >
+                @if(file.typeFile.typeName.equals("File")) {
+                    <td class="col s7" data-href="@routes.FilesController.showFile(username, projectname, file.path)">
+                        <i class="fas fa-file"></i>
+                        @file.name
+                    </td>
+                    <td class="col s3" data-href="@routes.FilesController.showFile(username, projectname, file.path)">
+                        @file.date.format("yyyy.MM.dd HH:mm:ss")
+                    </td>
+                    <td class="col s2 right-align">
+                        <a class="btn-floating btn-tb green lighten-2" href="@routes.FilesController.download(username,projectname,0,file.path)">
+                            <i class="material-icons">file_download</i>
+                        </a>
+                        <a class="btn-floating btn-tb red lighten-2 modal-trigger" href="#@file.id">
+                            <i class="material-icons">delete_forever</i>
+                        </a>
+                    </td>
+                }else{
+                    <td class="col s7" data-href="@routes.FilesController.showDir(username, projectname, file.path)">
+                        <i class="fas fa-folder"></i>
+                        @file.name
+                    </td>
+                    <td class="col s3" data-href="@routes.FilesController.showDir(username, projectname, file.path)">
+                        @file.date.format("yyyy.MM.dd HH:mm:ss")
+                    </td>
+                    <td class="col s2 right-align">
+                        <a class="btn-floating btn-tb red lighten-2 modal-trigger" href="#@file.id">
+                            <i class="material-icons">delete_forever</i>
+                        </a>
+                    </td>
+                }
+            </tr>
+            <div id="@file.id" class="modal">
+                <div class="modal-content">
+                    <h5>Remove file</h5>
+                    <p>Do you really want to delete file: @file.name?</p>
+                </div>
+                <div class="modal-footer">
+                    <form action="@routes.FilesController.destroy(username, projectname,file.path)" method="post">
+                        @CSRF.formField
+                    <button class=" waves-effect waves-light waves-teal btn-flat" type="submit">Ok</button>
+                    <button class="btn waves-effect waves-light" onclick="$('#@file.id').modal('close');" type="button">Cancel</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </table>
+}

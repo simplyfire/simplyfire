@@ -1,0 +1,15 @@
+@import play.data.validation.ValidationError
+@(errors: List[ValidationError])
+@if(flash().containsKey("success")) {
+    <div class="row success-panel card-panel green lighten-3">
+        <div>@flash().get("success")</div>
+    </div>
+}
+@if(flash().containsKey("error") || !errors.isEmpty()){
+    <div class="row error-panel card-panel red lighten-3">
+        @for(error <- errors) {
+            <div>@Messages(error.message(), error.key())</div>
+        }
+        <div>@flash().get("error")</div>
+    </div>
+}
